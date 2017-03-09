@@ -51,6 +51,20 @@ void AppClass::Update(void)
 	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), REYELLOW);
 	m_pMeshMngr->Print("FPS:");
 	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
+	int nFPS = m_pSystem->GetFPS();
+
+	static DWORD startTimeSystem = GetTickCount();
+	matrix4 m4sphere1;
+	float timer = (float)((GetTickCount() - startTimeSystem) / 1000.0f);
+	float timerMapped = MapValue(timer, 0.0f, 5.0f, 0.0f, 1.0f);
+
+	m_pMeshMngr->AddSphereToRenderList(m4sphere1, RERED, WIRE);
+	m_pMeshMngr->PrintLine("");
+	m_pMeshMngr->PrintLine("Actual time is :" + std::to_string(timer), REYELLOW);
+
+	vector3 v3lerp = glm::lerp(vector3(0, 0, 0), vector3(1, 0, 0), ((float)(GetTickCount() - startTimeSystem) / 1000.0f));
+	m4sphere1 = glm::translate(v3lerp);
+	m_pMeshMngr->SetModelMatrix(m4sphere1);
 #pragma endregion
 }
 
