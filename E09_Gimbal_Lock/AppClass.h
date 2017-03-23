@@ -20,6 +20,9 @@ public:
 
 	vector3 m_v3Orientation;
 
+	matrix4 m_m4Rotation;
+
+	quaternion quat;
 	/* Constructor */
 	AppClass(HINSTANCE hInstance, LPWSTR lpCmdLine, int nCmdShow) : super(hInstance, lpCmdLine, nCmdShow) {}
 
@@ -79,6 +82,8 @@ public:
 	OUTPUT: ---
 	*/
 	virtual void WriteConfig(void) final {}
+
+	virtual matrix4 QuaterionMatrix(float x, float y, float z, float w);
 };
 
 #endif //__APPLICATION_H_

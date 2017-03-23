@@ -26,31 +26,28 @@ void AppClass::Update(void)
 		CameraRotation();
 
 	//Rotation matrices
-	matrix4 rotX = glm::rotate(IDENTITY_M4, m_v3Orientation.x, REAXISX);
-	matrix4 rotY = glm::rotate(IDENTITY_M4, m_v3Orientation.y, REAXISY);
-	matrix4 rotZ = glm::rotate(IDENTITY_M4, m_v3Orientation.z, REAXISZ);
-
+	
 	//linear combination
-	m_mToWorld = rotX * rotY * rotZ;
-
+	m_mToWorld = m_mToWorld * m_m4Rotation;
+	m_m4Rotation = matrix4();
 	//Setting the model matrix
 	m_pMeshMngr->SetModelMatrix(m_mToWorld, "Steve");
 
 	//Adding the instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("Steve");
 
-	int nFPS = m_pSystem->GetFPS();
+
+	//Debug information about the world matrix
 	m_pMeshMngr->PrintLine("");
 	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), REYELLOW);
-	m_pMeshMngr->Print("X:", REYELLOW);
-	m_pMeshMngr->PrintLine(std::to_string(m_v3Orientation.x), RERED);
-	m_pMeshMngr->Print("Y:", REYELLOW);
-	m_pMeshMngr->PrintLine(std::to_string(m_v3Orientation.y), RERED);
-	m_pMeshMngr->Print("Z:", REYELLOW);
-	m_pMeshMngr->PrintLine(std::to_string(m_v3Orientation.z), RERED);
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 4; j++) {
+			m_pMeshMngr->Print(std::to_string(m_mToWorld[i][j]) + " ", RERED);
+		}
+		m_pMeshMngr->PrintLine("");
+	}
+	
 
-	m_pMeshMngr->Print("FPS:");
-	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
 }
 
 void AppClass::Display(void)

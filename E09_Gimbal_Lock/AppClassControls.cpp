@@ -23,23 +23,25 @@ void AppClass::ProcessKeyboard(void)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 	{
-		m_v3Orientation = vector3(0.0f);
+		//Reset world rotation and current expected rotation
+		m_mToWorld = matrix4();
+		m_m4Rotation = matrix4();
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 	{
-		if (!bModifier) m_v3Orientation.x += 1.0f;
-		else m_v3Orientation.x -= 1.0f;
+		if (!bModifier) m_m4Rotation = QuaterionMatrix(1, 0, 0, .025f);
+		else m_m4Rotation = QuaterionMatrix(1, 0, 0, -.025f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 	{
-		if (!bModifier) m_v3Orientation.y += 1.0f;
-		else m_v3Orientation.y -= 1.0f;
+		if (!bModifier) m_m4Rotation = QuaterionMatrix(0, 1, 0, .025f);
+		else m_m4Rotation = QuaterionMatrix(0, 1, 0, -.025f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 	{
-		if (!bModifier) m_v3Orientation.z += 1.0f;
-		else m_v3Orientation.z -= 1.0f;
+		if (!bModifier) m_m4Rotation = QuaterionMatrix(0, 0, 1, .025f);
+		else m_m4Rotation = QuaterionMatrix(0, 0, 1, -.025f);
 	}
 
 #pragma region Camera Positioning
@@ -73,4 +75,19 @@ void AppClass::ProcessMouse(void)
 	
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
 		m_bFPC = true;
+}
+
+//Store quaterion information in a 4x4 matrix for rotation
+matrix4 AppClass::QuaterionMatrix(float x, float y, float z, float w)
+{
+	/* LeftHand Verison
+	return matrix4	((1 - 2 * y*y - 2 * z*z	, 2 * x*y - 2 * z*w		, 2*x*z + 2 * y*w		, 0,
+					2 * x*y + 2 * z*w		, 1 - 2 * x*x - 2 * z*z	, 2 * y*z - 2 * x*w		, 0,
+					2 * x*z - 2 * y*w		, 2 * y*z + 2 * x*w		, 1 - 2 * x*x - 2 * y*y	, 0,
+					0						,0						, 0						, 1));
+	*/
+	return matrix4(cos(w) + x*x*(1-cos(w))	, x*y*(1-cos(w))-z*sin(w)	, x*z*(1-cos(w)) + y*sin(w)	, 0,
+					y*x*(1-cos(w))+z*sin(w)	, cos(w) +y*y*(1-cos(w))	, y*z*(1-cos(w))-x*sin(w)	, 0,
+					z*x*(1-cos(w))-y*sin(w)	, z*y*(1-cos(w))+x*sin(w)	, cos(w)+z*z*(1-cos(w))		, 0,
+					0						, 0							, 0							, 1);
 }
