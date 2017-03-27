@@ -95,6 +95,7 @@ void AppClass::Update(void)
 	m_pMeshMngr->Print("FPS:");
 	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
 
+
 	static DWORD startTimeSystem = GetTickCount();
 	matrix4 m4sphere1;
 	float timer = (float)((GetTickCount() - startTimeSystem) / 1000.0f);
