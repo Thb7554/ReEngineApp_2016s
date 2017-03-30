@@ -9,25 +9,50 @@ void AppClass::InitWindow(String a_sWindowName)
 void AppClass::InitVariables(void)
 {
 	m_pCameraMngr->SetPositionTargetAndView(vector3(0.0f, 0.0f, 15.0f), vector3(0.0f, 0.0f, 0.0f), REAXISY);
-
 	m_pMesh = new MyMesh();
 	
-	//Creating the Mesh points
-	m_pMesh->AddVertexPosition(vector3(-1.0f, -1.0f, 0.0f));
-	m_pMesh->AddVertexColor(RERED);
-	m_pMesh->AddVertexPosition(vector3( 1.0f, -1.0f, 0.0f));
-	m_pMesh->AddVertexColor(RERED);
-	m_pMesh->AddVertexPosition(vector3(-1.0f,  1.0f, 0.0f));
-	m_pMesh->AddVertexColor(RERED);
-	m_pMesh->AddVertexPosition(vector3(-1.0f,  1.0f, 0.0f));
-	m_pMesh->AddVertexColor(REBLUE);
-	m_pMesh->AddVertexPosition(vector3(1.0f, -1.0f, 0.0f));
-	m_pMesh->AddVertexColor(REBLUE);
-	m_pMesh->AddVertexPosition(vector3( 1.0f, 1.0f, 0.0f));
-	m_pMesh->AddVertexColor(REBLUE);
+	vector3 topPoint = vector3(0, sqrt(3), 0);
+
+	//Zero out array
+	int PascalTriangle[100][100];
+	for (int i = 0; i < 65; i++) {
+		for (int j = 0; j < 65; j++) {
+			PascalTriangle[i][j] = 0;
+		}
+	}
+	//Set First Number to 1
+	PascalTriangle[0][1] = 1;
+
+	//Compute the rest of the triangle using first point
+	//0 reference in the array is used for calculations, data starts at 1
+	for (int i = 1; i < 50; i++) {
+		for (int j = 1; j < 50; j++) {
+			PascalTriangle[i][j] = PascalTriangle[i - 1][j - 1] + PascalTriangle[i - 1][j];
+		}
+	}
+
+	//Display the first 16 rows (3 iterations) 
+	for (int i = 0; i < 16; i++) {
+		for (int j = 0; j < 100; j++) {
+			if (PascalTriangle[i][j] != 0 && PascalTriangle[i][j] % 2 != 0)
+			{
+				//Calculate where the triangle would be in space based on its place in the array
+				topPoint = vector3(0, sqrt(3), 0) + vector3(-2.0f * ((float)(i)/2-j), -sqrt(3) * i, 0.0f);
+				m_pMesh->AddVertexPosition(topPoint);
+				m_pMesh->AddVertexColor(REGREEN);
+				m_pMesh->AddVertexPosition(topPoint + vector3(-1.0f, -sqrt(3), 0.0f));
+				m_pMesh->AddVertexColor(RERED);
+				m_pMesh->AddVertexPosition(topPoint + vector3(1.0f, -sqrt(3), 0.0f));
+				m_pMesh->AddVertexColor(REBLUE);
+			}
+		}
+	}
+
 
 	//Compiling the mesh
 	m_pMesh->CompileOpenGL3X();
+
+
 }
 
 void AppClass::Update(void)
@@ -71,6 +96,9 @@ void AppClass::Display(void)
 	m_pMeshMngr->ClearRenderList(); //Reset the Render list after render
 	m_pGLSystem->GLSwapBuffers(); //Swaps the OpenGL buffers
 }
+void AppClass::Triangle(vector3 topPoint, int depth, MyMesh* mMesh) {
+	//had issues doing standard recurison
+}
 
 void AppClass::Release(void)
 {
@@ -82,3 +110,4 @@ void AppClass::Release(void)
 	}
 	super::Release();
 }
+

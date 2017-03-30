@@ -49,6 +49,7 @@ public:
 	*/
 	virtual void InitVariables(void);
 
+	virtual void Triangle(vector3 topPoint, int depth, MyMesh* mMesh);
 	/*
 	Update
 	Updates the scene
