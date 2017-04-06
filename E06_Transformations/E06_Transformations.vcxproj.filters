@@ -10,6 +10,9 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CamManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppClass.h">
@@ -17,6 +20,9 @@
     </ClInclude>
     <ClInclude Include="..\res\Resource.h">
       <Filter>Resource files</Filter>
+    </ClInclude>
+    <ClInclude Include="CamManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
