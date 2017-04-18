@@ -36,9 +36,14 @@ void AppClass::Update(void)
 	//Adding the instance to the render list
 	m_pMeshMngr->AddInstanceToRenderList("Steve");
 
+<<<<<<< HEAD
 
 	//Debug information about the world matrix
 	m_pMeshMngr->PrintLine("");
+=======
+	int nFPS = m_pSystem->GetFPS();
+	m_pMeshMngr->PrintLine("");//Add a line on top
+>>>>>>> 1916e612cfe8ad2068b2a3999ca9918819abc11a
 	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), REYELLOW);
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
