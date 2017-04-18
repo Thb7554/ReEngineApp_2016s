@@ -114,9 +114,9 @@ void AppClass::Update(void)
 	m_pMeshMngr->Print(" , ");
 	m_pMeshMngr->Print(std::to_string(m_pBS0->GetCenterGlobal().z), RERED);
 	m_pMeshMngr->PrintLine(")");
-
 	m_pMeshMngr->Print("FPS:");
 	m_pMeshMngr->Print(std::to_string(nFPS), RERED);
+	m_pMeshMngr->PrintLine("");
 }
 
 void AppClass::Display(void)

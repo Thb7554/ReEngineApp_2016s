@@ -2,6 +2,8 @@
 
 MyBoundingBoxClass::MyBoundingBoxClass(std::vector<vector3> vertexList)
 {
+	//Aligned list for bounding box
+	alignedList = std::vector(vector3(0, 0, 0), vector3(0, 0, 0), vector3(0, 0, 0), vector3(0, 0, 0), vector3(0, 0, 0), vector3(0, 0, 0), vector3(0, 0, 0), vector3(0, 0, 0), vector3(0, 0, 0));
 	m_bColliding = false;
 	m_fRadius = 0.0f;
 	m_v3CenterGlobal = vector3(0.0f);
@@ -42,6 +44,19 @@ MyBoundingBoxClass::MyBoundingBoxClass(std::vector<vector3> vertexList)
 		}
 	}
 
+	//Get axis aligned bounding box from vertices
+	alignedList[0] = vector3(m_v3Min.x, m_v3Min.y, m_v3Min.z);
+	alignedList[1] = vector3(m_v3Min.x, m_v3Min.y, m_v3Max.z);
+	alignedList[2] = vector3(m_v3Min.x, m_v3Max.y, m_v3Max.z);
+	alignedList[3] = vector3(m_v3Max.x, m_v3Max.y, m_v3Max.z);
+	alignedList[4] = vector3(m_v3Max.x, m_v3Max.y, m_v3Min.z);
+	alignedList[5] = vector3(m_v3Max.x, m_v3Min.y, m_v3Min.z);
+	alignedList[6] = vector3(m_v3Min.x, m_v3Max.y, m_v3Min.z);
+	alignedList[7] = vector3(m_v3Max.x, m_v3Min.y, m_v3Max.z);
+
+
+
+
 	m_v3CenterLocal = m_v3CenterGlobal = (m_v3Max + m_v3Min) / 2.0f;
 	m_fRadius = glm::distance(m_v3CenterGlobal, m_v3Max);
 	m_pMeshMngr = MeshManagerSingleton::GetInstance();
@@ -67,6 +82,17 @@ void MyBoundingBoxClass::RenderSphere()
 		glm::scale(m_v3Size),
 		v3Color, WIRE);
 }
+void MyBoundingBoxClass::RenderBox()
+{
+	vector3 v3Color = REGREEN;
+	if (true == m_bColliding)
+		v3Color = RERED;
+
+	m_pMeshMngr->AddCubeToRenderList(
+		glm::translate(m_v3CenterLocal) *
+		glm::scale(m_v3Size),
+		REYELLOW, WIRE);
+}
 void MyBoundingBoxClass::SetModelMatrix(matrix4 a_m4ToWorld)
 {
 	if (m_m4ToWorld == a_m4ToWorld)
@@ -82,19 +108,16 @@ bool MyBoundingBoxClass::IsColliding(MyBoundingBoxClass* a_other)
 {
 	if (this->m_v3MaxG.x < a_other->m_v3MinG.x)
 		return false;
-	if (this->m_v3MinG.x > a_other->m_v3MaxG.x)
-		return false;
-
 	if (this->m_v3MaxG.y < a_other->m_v3MinG.y)
+		return false;
+	if (this->m_v3MaxG.z < a_other->m_v3MinG.z)
+		return false;
+	if (this->m_v3MinG.x > a_other->m_v3MaxG.x)
 		return false;
 	if (this->m_v3MinG.y > a_other->m_v3MaxG.y)
 		return false;
-
-	if (this->m_v3MaxG.z < a_other->m_v3MinG.z)
-		return false;
 	if (this->m_v3MinG.z > a_other->m_v3MaxG.z)
 		return false;
-
 	return true;
 }
 

@@ -11,6 +11,8 @@ private:
 	MeshManagerSingleton* m_pMeshMngr = nullptr; //for drawing the sphere
 	bool m_bColliding = false;
 
+	std::vector<vector3> alignedList;
+
 	vector3 m_v3Max;
 	vector3 m_v3Min;
 	vector3 m_v3Size;
@@ -65,11 +67,14 @@ public:
 	Renders the sphere based on the radius and the center in global space
 	*/
 	void RenderSphere();
+
+	void RenderBox();
 	/*
 	Sets the transform from the local to world matrix
 	*/
 	void SetModelMatrix(matrix4 a_m4ToWorld);
 
+	vector3 GetVertex(int number);
 	/*
 	Will check the collision with another object
 	*/
